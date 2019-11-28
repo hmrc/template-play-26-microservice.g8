@@ -1,4 +1,5 @@
-package uk.gov.hmrc.agentsexternalstubs.support
+package $package$.support
+
 import org.scalatest.matchers.{MatchResult, Matcher}
 import play.api.libs.json.{JsArray, JsObject, JsValue, Reads}
 
