@@ -1,5 +1,5 @@
 # microservice specific routes
 
-GET         /entities                       @$package$.controllers.$servicenameCamel$WithMongodbController.entities
-GET         /entities/:utr                  @$package$.controllers.$servicenameCamel$WithMongodbController.entitiesByUtr(utr:uk.gov.hmrc.agentmtdidentifiers.model.Utr)
+GET         /entities                       @$package$.controllers.$servicenameCamel$Controller.entities
+GET         /entities/:utr                  @$package$.controllers.$servicenameCamel$Controller.entitiesByUtr(utr:uk.gov.hmrc.agentmtdidentifiers.model.Utr)
 

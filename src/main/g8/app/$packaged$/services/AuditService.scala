@@ -26,8 +26,8 @@ class AuditService @Inject()(val auditConnector: AuditConnector) {
   import $servicenameCamel$WithMongodbEvent._
 
   def send$servicenameCamel$WithMongodbSomethingHappened(
-                                                       model: $servicenameCamel$Model,
-                                                       agentReference: Arn)(implicit hc: HeaderCarrier, request: Request[Any], ec: ExecutionContext): Unit =
+    model: $servicenameCamel$Model,
+    agentReference: Arn)(implicit hc: HeaderCarrier, request: Request[Any], ec: ExecutionContext): Unit =
     auditEvent(
       $servicenameCamel$WithMongodbEvent.$servicenameCamel$WithMongodbSomethingHappened,
       "$servicenameHyphen$-with-mongodb-something-happened",

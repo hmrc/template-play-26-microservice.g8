@@ -12,7 +12,7 @@ To create a new project based on the template:
     
 and then
     
-    cd new-shiny-service
+    cd template-test
     git init
 	git add .
 	git commit -m start
@@ -27,7 +27,7 @@ How to test the template and generate an example project
 
 * Run `./test.sh` 
 
-An example project will be then created and tested in `target/sandbox/new-shiny-service`
+An example project will be then created and tested in `target/sandbox/template-test`
 
 How to modify the template?
 ==
