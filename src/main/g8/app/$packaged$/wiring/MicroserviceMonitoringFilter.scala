@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,8 @@ class MicroserviceMonitoringFilter @Inject()(metrics: Metrics, routes: Routes)(
   implicit ec: ExecutionContext,
   val mat: Materializer)
     extends MonitoringFilter(metrics.defaultRegistry) {
-  override def keyToPatternMapping: Seq[(String, String)] = KeyToPatternMappingFromRoutes(routes, Set())
+  override def keyToPatternMapping: Seq[(String, String)] =
+    KeyToPatternMappingFromRoutes(routes, Set())
 }
 
 object KeyToPatternMappingFromRoutes {
@@ -63,7 +64,8 @@ object KeyToPatternMappingFromRoutes {
 abstract class MonitoringFilter(kenshooRegistry: MetricRegistry)(implicit ec: ExecutionContext)
     extends Filter with MonitoringKeyMatcher {
 
-  override def apply(nextFilter: (RequestHeader) => Future[Result])(requestHeader: RequestHeader): Future[Result] = {
+  override def apply(nextFilter: (RequestHeader) => Future[Result])(
+    requestHeader: RequestHeader): Future[Result] = {
 
     implicit val hc: HeaderCarrier = fromHeadersAndSession(requestHeader.headers)
 
@@ -84,8 +86,9 @@ abstract class MonitoringFilter(kenshooRegistry: MetricRegistry)(implicit ec: Ex
       function
     }
 
-  private def timer(serviceName: String)(
-    function: => Future[Result])(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Result] = {
+  private def timer(serviceName: String)(function: => Future[Result])(
+    implicit hc: HeaderCarrier,
+    ec: ExecutionContext): Future[Result] = {
     val start = System.nanoTime()
     function.andThen {
       case Success(result) =>
@@ -95,23 +98,34 @@ abstract class MonitoringFilter(kenshooRegistry: MetricRegistry)(implicit ec: Ex
         kenshooRegistry.getTimers
           .getOrDefault(timerName, kenshooRegistry.timer(timerName))
           .update(System.nanoTime() - start, NANOSECONDS)
-        kenshooRegistry.getCounters.getOrDefault(counterName, kenshooRegistry.counter(counterName)).inc()
+        kenshooRegistry.getCounters
+          .getOrDefault(counterName, kenshooRegistry.counter(counterName))
+          .inc()
 
-      case Failure(exception: Upstream5xxResponse) => recordFailure(serviceName, exception.upstreamResponseCode, start)
-      case Failure(exception: Upstream4xxResponse) => recordFailure(serviceName, exception.upstreamResponseCode, start)
-      case Failure(exception: HttpException)       => recordFailure(serviceName, exception.responseCode, start)
-      case Failure(_: Throwable)                   => recordFailure(serviceName, 500, start)
+      case Failure(exception: Upstream5xxResponse) =>
+        recordFailure(serviceName, exception.upstreamResponseCode, start)
+      case Failure(exception: Upstream4xxResponse) =>
+        recordFailure(serviceName, exception.upstreamResponseCode, start)
+      case Failure(exception: HttpException) =>
+        recordFailure(serviceName, exception.responseCode, start)
+      case Failure(_: Throwable) => recordFailure(serviceName, 500, start)
     }
   }
 
-  private def recordFailure(serviceName: String, upstreamResponseCode: Int, startTime: Long): Unit = {
+  private def recordFailure(
+    serviceName: String,
+    upstreamResponseCode: Int,
+    startTime: Long): Unit = {
     val timerName = s"Timer-\$serviceName"
     val counterName =
-      if (upstreamResponseCode >= 500) s"Http5xxErrorCount-\$serviceName" else s"Http4xxErrorCount-\$serviceName"
+      if (upstreamResponseCode >= 500) s"Http5xxErrorCount-\$serviceName"
+      else s"Http4xxErrorCount-\$serviceName"
     kenshooRegistry.getTimers
       .getOrDefault(timerName, kenshooRegistry.timer(timerName))
       .update(System.nanoTime() - startTime, NANOSECONDS)
-    kenshooRegistry.getCounters.getOrDefault(counterName, kenshooRegistry.counter(counterName)).inc()
+    kenshooRegistry.getCounters
+      .getOrDefault(counterName, kenshooRegistry.counter(counterName))
+      .inc()
   }
 }
 
@@ -132,7 +146,8 @@ trait MonitoringKeyMatcher {
     while (m.find()) {
       val variable = m.group().substring(1)
       if (variables.contains(variable)) {
-        throw new IllegalArgumentException(s"Duplicated variable name '\$variable' in monitoring filter pattern '\$p'")
+        throw new IllegalArgumentException(
+          s"Duplicated variable name '\$variable' in monitoring filter pattern '\$p'")
       }
       variables = variables :+ variable
     }

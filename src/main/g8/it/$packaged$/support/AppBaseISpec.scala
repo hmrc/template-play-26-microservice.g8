@@ -2,20 +2,10 @@ package $package$.support
 
 import org.scalatestplus.play.OneAppPerSuite
 import play.api.Application
-import play.api.inject.guice.GuiceApplicationBuilder
+import $package$.stubs.AuthStubs
 
-abstract class AppBaseISpec extends BaseISpec with OneAppPerSuite {
+abstract class AppBaseISpec extends BaseISpec with OneAppPerSuite with TestApplication with AuthStubs {
 
   override implicit lazy val app: Application = appBuilder.build()
-
-  protected override def appBuilder: GuiceApplicationBuilder = {
-    new GuiceApplicationBuilder()
-      .configure(
-        "microservice.services.auth.port" -> wireMockPort,
-        "metrics.enabled" -> true,
-        "auditing.enabled" -> true,
-        "auditing.consumer.baseUri.host" -> wireMockHost,
-        "auditing.consumer.baseUri.port" -> wireMockPort)
-  }
 
 }
