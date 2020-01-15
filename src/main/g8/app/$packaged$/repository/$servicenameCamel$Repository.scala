@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package $package$.repository
 
 import javax.inject.{Inject, Singleton}
@@ -33,7 +34,8 @@ import scala.concurrent.{ExecutionContext, Future}
 case class $servicenameCamel$WithMongodbEntity(id: String, dummy: String)
 
 object $servicenameCamel$WithMongodbEntity extends ReactiveMongoFormats {
-  implicit val formats: Format[$servicenameCamel$WithMongodbEntity] = format[$servicenameCamel$WithMongodbEntity]
+  implicit val formats: Format[$servicenameCamel$WithMongodbEntity] =
+    format[$servicenameCamel$WithMongodbEntity]
 }
 
 @Singleton
@@ -42,10 +44,13 @@ class $servicenameCamel$WithMongodbRepository @Inject()(mongoComponent: Reactive
       "$servicenameHyphen$-with-mongodb",
       mongoComponent.mongoConnector.db,
       $servicenameCamel$WithMongodbEntity.formats,
-      ReactiveMongoFormats.objectIdFormats) with StrictlyEnsureIndexes[$servicenameCamel$WithMongodbEntity, BSONObjectID] {
+      ReactiveMongoFormats.objectIdFormats)
+    with StrictlyEnsureIndexes[$servicenameCamel$WithMongodbEntity, BSONObjectID] {
 
-  def findBy(id: String)(implicit ec: ExecutionContext): Future[List[$servicenameCamel$WithMongodbEntity]] =
-    find(Seq("id" -> Some(id)).map(option => option._1 -> toJsFieldJsValueWrapper(option._2.get)): _*)
+  def findBy(id: String)(
+    implicit ec: ExecutionContext): Future[List[$servicenameCamel$WithMongodbEntity]] =
+    find(
+      Seq("id" -> Some(id)).map(option => option._1 -> toJsFieldJsValueWrapper(option._2.get)): _*)
 
   override def indexes = Seq(
     Index(Seq("id" -> Ascending), Some("$servicenameCamel$WithMongodb"), unique = true)

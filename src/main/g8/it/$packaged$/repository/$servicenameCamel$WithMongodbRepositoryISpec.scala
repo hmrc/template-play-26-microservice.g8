@@ -34,7 +34,8 @@ class $servicenameCamel$WithMongodbRepositoryISpec extends UnitSpec with MongoAp
 
   override implicit lazy val app: Application = appBuilder.build()
 
-  def repo: $servicenameCamel$WithMongodbRepository = app.injector.instanceOf[$servicenameCamel$WithMongodbRepository]
+  def repo: $servicenameCamel$WithMongodbRepository =
+    app.injector.instanceOf[$servicenameCamel$WithMongodbRepository]
 
   override def beforeEach() {
     super.beforeEach()
