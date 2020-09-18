@@ -30,27 +30,27 @@ trait StrictlyEnsureIndexes[A <: Any, ID <: Any] {
   private def ensureIndexOrFail(index: Index)(implicit ec: ExecutionContext): Future[Boolean] = {
     val indexInfo = s"""\${index.eventualName}, key=\${index.key
       .map { case (k, _) => k }
-      .mkString("+")}, unique=\${index.unique}, background=\${index.background}, sparse=\${index.sparse}"""
+      .mkString(
+        "+"
+      )}, unique=\${index.unique}, background=\${index.background}, sparse=\${index.sparse}"""
     collection.indexesManager
       .create(index)
-      .map(wr => {
+      .map { wr =>
         if (wr.ok) {
           logger.info(s"Successfully Created Index \${collection.name}.\$indexInfo")
           true
         } else {
           val msg = wr.writeErrors.mkString(", ")
-          if (msg.contains("E11000")) {
+          if (msg.contains("E11000"))
             // this is for backwards compatibility to mongodb 2.6.x
             throw GenericDatabaseException(msg, wr.code)
-          } else {
+          else
             throw new IllegalStateException(s"Failed to ensure index \$indexInfo, error=\$msg")
-          }
         }
-      })
-      .recover {
-        case t =>
-          logger.error(message, t)
-          false
+      }
+      .recover { case t =>
+        logger.error(message, t)
+        false
       }
   }
 

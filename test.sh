@@ -12,7 +12,7 @@ if [[ -f ./build.sbt ]] && [[ -d ./src/main/g8 ]]; then
     git init
 	git add .
 	git commit -m start
-    sbt test it:test
+    sbt test
 
 else
 

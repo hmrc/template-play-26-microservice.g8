@@ -39,22 +39,25 @@ object $servicenameCamel$WithMongodbEntity extends ReactiveMongoFormats {
 }
 
 @Singleton
-class $servicenameCamel$WithMongodbRepository @Inject()(mongoComponent: ReactiveMongoComponent)
+class $servicenameCamel$WithMongodbRepository @Inject() (mongoComponent: ReactiveMongoComponent)
     extends ReactiveRepository[$servicenameCamel$WithMongodbEntity, BSONObjectID](
       "$servicenameHyphen$-with-mongodb",
       mongoComponent.mongoConnector.db,
       $servicenameCamel$WithMongodbEntity.formats,
-      ReactiveMongoFormats.objectIdFormats)
-    with StrictlyEnsureIndexes[$servicenameCamel$WithMongodbEntity, BSONObjectID] {
+      ReactiveMongoFormats.objectIdFormats
+    ) with StrictlyEnsureIndexes[$servicenameCamel$WithMongodbEntity, BSONObjectID] {
 
-  def findBy(id: String)(
-    implicit ec: ExecutionContext): Future[List[$servicenameCamel$WithMongodbEntity]] =
+  def findBy(
+    id: String
+  )(implicit ec: ExecutionContext): Future[List[$servicenameCamel$WithMongodbEntity]] =
     find(
-      Seq("id" -> Some(id)).map(option => option._1 -> toJsFieldJsValueWrapper(option._2.get)): _*)
+      Seq("id" -> Some(id)).map(option => option._1 -> toJsFieldJsValueWrapper(option._2.get)): _*
+    )
 
-  override def indexes = Seq(
-    Index(Seq("id" -> Ascending), Some("$servicenameCamel$WithMongodb"), unique = true)
-  )
+  override def indexes =
+    Seq(
+      Index(Seq("id" -> Ascending), Some("$servicenameCamel$WithMongodb"), unique = true)
+    )
 
   def createEntity(id: String, dummy: String)(implicit ec: ExecutionContext): Future[Unit] =
     insert($servicenameCamel$WithMongodbEntity(id, dummy)).map(_ => ())

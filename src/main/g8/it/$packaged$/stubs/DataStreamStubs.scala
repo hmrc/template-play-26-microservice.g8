@@ -17,7 +17,8 @@ trait DataStreamStubs extends Eventually {
     count: Int,
     event: $servicenameCamel$WithMongodbEvent,
     tags: Map[String, String] = Map.empty,
-    detail: Map[String, String] = Map.empty): Unit =
+    detail: Map[String, String] = Map.empty
+  ): Unit =
     eventually {
       verify(
         count,

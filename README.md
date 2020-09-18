@@ -8,7 +8,7 @@ How to create a new project based on the template?
 * Decide your service name (the hardest part :))
 * Run the command
 
-    `g8 hmrc/template-play-26-microservice.g8 --servicename="New Shiny Service" --serviceTargetPort="9999" --package="uk.gov.hmrc.newshinyservice"`
+    `g8 {GITHUB_USER}/template-play-26-microservice.g8 --servicename="New Shiny Service" --serviceTargetPort="9999" --package="uk.gov.hmrc.newshinyservice" -o template-test`
     
 and then
     
@@ -19,7 +19,7 @@ and then
   
 * Test generated project using command 
 
-    `sbt test it:test`
+    `sbt test`
     
 
 How to test the template and generate an example project?
@@ -41,7 +41,7 @@ or (safer) ...
 * run `./test.sh` first
 * open `target/sandbox/template-test` in your preferred IDE, 
 * modify the generated example project as you wish, 
-* build and test it as usual, you can run `sbt test it:test`,
+* build and test it as usual, you can run `sbt test`,
 * when you are done switch back to the template root
 * run `./update-g8.sh` in order to port your changes back to the template.
 * run `./test.sh` again to validate your changes
@@ -56,6 +56,9 @@ the template will supply the following values for the placeholders:
 	$package$ -> uk.gov.hmrc.newshinyservice
 	$servicenameCamel$ -> NewShinyService
 	$servicenamecamel$ -> newShinyService
+	$servicenameNoSpaceLowercase$ -> newshinyservice
+	$servicenameNoSpaceUppercase$ -> NEWSHINYSERVICE
+	$servicenamesnake$ -> new_shiny_service
 	$servicenameSnake$ -> NEW_SHINY_SERVICE
 	$servicenamePackage$ -> New.Shiny.Service
 	$servicenamePackageLowercase$ -> new.shiny.service

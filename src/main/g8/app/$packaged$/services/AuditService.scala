@@ -37,16 +37,14 @@ object $servicenameCamel$WithMongodbEvent extends Enumeration {
 }
 
 @Singleton
-class AuditService @Inject()(val auditConnector: AuditConnector) {
+class AuditService @Inject() (val auditConnector: AuditConnector) {
 
   import $servicenameCamel$WithMongodbEvent._
 
   def send$servicenameCamel$WithMongodbSomethingHappened(
     model: $servicenameCamel$Model,
-    agentReference: Arn)(
-    implicit hc: HeaderCarrier,
-    request: Request[Any],
-    ec: ExecutionContext): Unit =
+    agentReference: Arn
+  )(implicit hc: HeaderCarrier, request: Request[Any], ec: ExecutionContext): Unit =
     auditEvent(
       $servicenameCamel$WithMongodbEvent.$servicenameCamel$WithMongodbSomethingHappened,
       "$servicenameHyphen$-with-mongodb-something-happened",
@@ -61,19 +59,15 @@ class AuditService @Inject()(val auditConnector: AuditConnector) {
   private[services] def auditEvent(
     event: $servicenameCamel$WithMongodbEvent,
     transactionName: String,
-    details: Seq[(String, Any)] = Seq.empty)(
-    implicit hc: HeaderCarrier,
-    request: Request[Any],
-    ec: ExecutionContext): Future[Unit] =
+    details: Seq[(String, Any)] = Seq.empty
+  )(implicit hc: HeaderCarrier, request: Request[Any], ec: ExecutionContext): Future[Unit] =
     send(createEvent(event, transactionName, details: _*))
 
   private[services] def createEvent(
     event: $servicenameCamel$WithMongodbEvent,
     transactionName: String,
-    details: (String, Any)*)(
-    implicit hc: HeaderCarrier,
-    request: Request[Any],
-    ec: ExecutionContext): DataEvent = {
+    details: (String, Any)*
+  )(implicit hc: HeaderCarrier, request: Request[Any], ec: ExecutionContext): DataEvent = {
 
     val detail = hc.toAuditDetails(details.map(pair => pair._1 -> pair._2.toString): _*)
     val tags = hc.toAuditTags(transactionName, request.path)
@@ -81,11 +75,13 @@ class AuditService @Inject()(val auditConnector: AuditConnector) {
       auditSource = "$servicenameHyphen$-with-mongodb",
       auditType = event.toString,
       tags = tags,
-      detail = detail)
+      detail = detail
+    )
   }
 
   private[services] def send(
-    events: DataEvent*)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Unit] =
+    events: DataEvent*
+  )(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Unit] =
     Future {
       events.foreach { event =>
         Try(auditConnector.sendEvent(event))

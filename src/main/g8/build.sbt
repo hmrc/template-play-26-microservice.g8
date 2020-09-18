@@ -16,24 +16,23 @@ lazy val scoverageSettings = {
 
 lazy val compileDeps = Seq(
   ws,
-  "uk.gov.hmrc" %% "bootstrap-play-26" % "1.3.0",
-  "uk.gov.hmrc" %% "auth-client" % "2.32.1-play-26",
-  "uk.gov.hmrc" %% "agent-mtd-identifiers" % "0.17.0-play-26",
+  "uk.gov.hmrc" %% "bootstrap-backend-play-26" % "2.25.0",
+  "uk.gov.hmrc" %% "auth-client" % "3.2.0-play-26",
+  "uk.gov.hmrc" %% "agent-mtd-identifiers" % "0.19.0-play-26",
   "com.kenshoo" %% "metrics-play" % "2.6.19_0.7.0",
-  "uk.gov.hmrc" %% "domain" % "5.6.0-play-26",
+  "uk.gov.hmrc" %% "domain" % "5.10.0-play-26",
   "com.github.blemale" %% "scaffeine" % "3.1.0",
-  "uk.gov.hmrc" %% "agent-kenshoo-monitoring" % "4.0.0",
-  "uk.gov.hmrc" %% "simple-reactivemongo" % "7.22.0-play-26",
+  "uk.gov.hmrc" %% "simple-reactivemongo" % "7.30.0-play-26",
   ws
 )
 
 def testDeps(scope: String) = Seq(
   "uk.gov.hmrc" %% "hmrctest" % "3.9.0-play-26" % scope,
-  "org.scalatest" %% "scalatest" % "3.0.8" % scope,
+  "org.scalatest" %% "scalatest" % "3.0.9" % scope,
   "org.mockito" % "mockito-core" % "3.1.0" % scope,
   "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.3" % scope,
-  "uk.gov.hmrc" %% "reactivemongo-test" % "4.16.0-play-26" % scope,
-  "com.github.tomakehurst" % "wiremock" % "2.25.1" % scope
+  "uk.gov.hmrc" %% "reactivemongo-test" % "4.21.0-play-26" % scope,
+  "com.github.tomakehurst" % "wiremock" % "2.27.2" % scope
 )
 
 val jettyVersion = "9.2.24.v20180105"
@@ -59,7 +58,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "$servicenameHyphen$",
     organization := "uk.gov.hmrc",
-    scalaVersion := "2.12.10",
+    scalaVersion := "2.12.12",
     PlayKeys.playDefaultPort := $serviceTargetPort$,
     resolvers := Seq(
       Resolver.bintrayRepo("hmrc", "releases"),
@@ -89,7 +88,7 @@ lazy val root = (project in file("."))
   .enablePlugins(PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin, SbtArtifactory)
 
 
-inConfig(IntegrationTest)(scalafmtCoreSettings)
+inConfig(IntegrationTest)(org.scalafmt.sbt.ScalafmtPlugin.scalafmtConfigSettings)
 
 def oneForkedJvmPerTest(tests: Seq[TestDefinition]) = {
   tests.map { test =>

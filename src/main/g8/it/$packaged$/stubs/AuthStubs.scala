@@ -16,7 +16,8 @@ trait AuthStubs {
   def authenticated[A](
     request: FakeRequest[A],
     enrolment: Enrolment,
-    isAgent: Boolean): FakeRequest[A] = {
+    isAgent: Boolean
+  ): FakeRequest[A] = {
     givenAuthorisedFor(
       s"""
          |{
@@ -45,7 +46,9 @@ trait AuthStubs {
         .willReturn(
           aResponse()
             .withStatus(401)
-            .withHeader("WWW-Authenticate", s"""MDTP detail="\$mdtpDetail"""")))
+            .withHeader("WWW-Authenticate", s"""MDTP detail="\$mdtpDetail"""")
+        )
+    )
 
   def givenAuthorisedFor(payload: String, responseBody: String): Unit = {
     stubFor(
@@ -56,14 +59,19 @@ trait AuthStubs {
           aResponse()
             .withStatus(200)
             .withHeader("Content-Type", "application/json")
-            .withBody(responseBody)))
+            .withBody(responseBody)
+        )
+    )
 
     stubFor(
       post(urlEqualTo("/auth/authorise"))
         .atPriority(2)
-        .willReturn(aResponse()
-          .withStatus(401)
-          .withHeader("WWW-Authenticate", "MDTP detail=\\"InsufficientEnrolments\\"")))
+        .willReturn(
+          aResponse()
+            .withStatus(401)
+            .withHeader("WWW-Authenticate", "MDTP detail=\\"InsufficientEnrolments\\"")
+        )
+    )
   }
 
   def verifyAuthoriseAttempt(): Unit =
