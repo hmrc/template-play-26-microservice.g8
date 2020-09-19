@@ -37,12 +37,18 @@ class $servicenameCamel$Controller @Inject() (
 
   def entities: Action[AnyContent] =
     Action.async { implicit request =>
-      Future.successful(Ok(toJson($servicenameCamel$Model("hello world", None, None, None))))
+      withAuthorisedAsAgent { arn =>
+        Future.successful(Ok(toJson($servicenameCamel$Model(s"hello \${arn.value}", None, None, None))))
+      }
     }
 
   def entitiesByUtr(utr: Utr): Action[AnyContent] =
     Action.async { implicit request =>
-      Future.successful(Ok(toJson($servicenameCamel$Model(s"hello \$utr", None, None, None))))
+      withAuthorisedAsAgent { arn =>
+        Future.successful(
+          Ok(toJson($servicenameCamel$Model(s"hello \$utr and \${arn.value}", None, None, None)))
+        )
+      }
     }
 
 }

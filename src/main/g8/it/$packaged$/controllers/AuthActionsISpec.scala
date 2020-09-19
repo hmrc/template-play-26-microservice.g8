@@ -34,7 +34,7 @@ class AuthActionsISpec extends AppBaseISpec {
   "withAuthorisedAsAgent" should {
 
     "call body with arn when valid agent" in {
-      givenAuthorisedFor(
+      stubForAuthAuthorise(
         "{}",
         s"""{
           |"authorisedEnrolments": [
@@ -56,7 +56,7 @@ class AuthActionsISpec extends AppBaseISpec {
     }
 
     "throw InsufficientEnrolments when agent not enrolled for service" in {
-      givenAuthorisedFor(
+      stubForAuthAuthorise(
         "{}",
         s"""{
           |"authorisedEnrolments": [
@@ -71,7 +71,7 @@ class AuthActionsISpec extends AppBaseISpec {
     }
 
     "throw InsufficientEnrolments when expected agent's identifier missing" in {
-      givenAuthorisedFor(
+      stubForAuthAuthorise(
         "{}",
         s"""{
           |"authorisedEnrolments": [
@@ -89,7 +89,7 @@ class AuthActionsISpec extends AppBaseISpec {
   "withAuthorisedAsClient" should {
 
     "call body with mtditid when valid mtd client" in {
-      givenAuthorisedFor(
+      stubForAuthAuthorise(
         "{}",
         s"""{
           |"authorisedEnrolments": [
@@ -105,7 +105,7 @@ class AuthActionsISpec extends AppBaseISpec {
     }
 
     "throw InsufficientEnrolments when client not enrolled for service" in {
-      givenAuthorisedFor(
+      stubForAuthAuthorise(
         "{}",
         s"""{
           |"authorisedEnrolments": [
@@ -120,7 +120,7 @@ class AuthActionsISpec extends AppBaseISpec {
     }
 
     "throw InsufficientEnrolments when expected client's identifier missing" in {
-      givenAuthorisedFor(
+      stubForAuthAuthorise(
         "{}",
         s"""{
           |"authorisedEnrolments": [

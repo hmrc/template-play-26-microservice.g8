@@ -10,15 +10,17 @@ trait AuthStubs {
 
   case class Enrolment(serviceName: String, identifierName: String, identifierValue: String)
 
-  def authorisedAsValidAgent[A](request: FakeRequest[A], arn: String) =
-    authenticated(request, Enrolment("HMRC-AS-AGENT", "AgentReferenceNumber", arn), isAgent = true)
+  def givenAuthorisedAsValidAgent[A](arn: String) =
+    givenAuthorisedWithEnrolment(
+      Enrolment("HMRC-AS-AGENT", "AgentReferenceNumber", arn),
+      isAgent = true
+    )
 
-  def authenticated[A](
-    request: FakeRequest[A],
+  def givenAuthorisedWithEnrolment[A](
     enrolment: Enrolment,
     isAgent: Boolean
-  ): FakeRequest[A] = {
-    givenAuthorisedFor(
+  ): Unit =
+    stubForAuthAuthorise(
       s"""
         |{
         |  "authorise": [
@@ -37,8 +39,6 @@ trait AuthStubs {
         |]}
           """.stripMargin
     )
-    request.withSession(SessionKeys.authToken -> "Bearer XYZ")
-  }
 
   def givenUnauthorisedWith(mdtpDetail: String): Unit =
     stubFor(
@@ -50,7 +50,7 @@ trait AuthStubs {
         )
     )
 
-  def givenAuthorisedFor(payload: String, responseBody: String): Unit = {
+  def stubForAuthAuthorise(payload: String, responseBody: String): Unit = {
     stubFor(
       post(urlEqualTo("/auth/authorise"))
         .atPriority(1)
