@@ -40,7 +40,7 @@ class AuditServiceSpec extends UnitSpec with MockitoSugar with Eventually {
 
   "auditService" should {
 
-    "send an $servicenameCamel$WithMongodbSomethingHappened event with the correct fields" in {
+    "send an $servicenameCamel$SomethingHappened event with the correct fields" in {
       val mockConnector = mock[AuditConnector]
       val service = new AuditService(mockConnector)
 
@@ -58,7 +58,7 @@ class AuditServiceSpec extends UnitSpec with MockitoSugar with Eventually {
       )
 
       await(
-        service.send$servicenameCamel$WithMongodbSomethingHappened(model, Arn("ARN0001"))(
+        service.send$servicenameCamel$SomethingHappened(model, Arn("ARN0001"))(
           hc,
           FakeRequest("GET", "/path"),
           ExecutionContext.Implicits.global
@@ -70,8 +70,8 @@ class AuditServiceSpec extends UnitSpec with MockitoSugar with Eventually {
         verify(mockConnector).sendEvent(captor.capture())(any[HeaderCarrier], any[ExecutionContext])
         val sentEvent = captor.getValue.asInstanceOf[DataEvent]
 
-        sentEvent.auditType shouldBe "$servicenameCamel$WithMongodbSomethingHappened"
-        sentEvent.auditSource shouldBe "$servicenameHyphen$-with-mongodb"
+        sentEvent.auditType shouldBe "$servicenameCamel$SomethingHappened"
+        sentEvent.auditSource shouldBe "$servicenameHyphen$"
         sentEvent.detail("agentReference") shouldBe "ARN0001"
         sentEvent.detail("parameter1") shouldBe "John Smith"
         sentEvent.detail("telephoneNumber") shouldBe "12313"
@@ -79,7 +79,7 @@ class AuditServiceSpec extends UnitSpec with MockitoSugar with Eventually {
 
         sentEvent.tags(
           "transactionName"
-        ) shouldBe "$servicenameHyphen$-with-mongodb-something-happened"
+        ) shouldBe "$servicenameHyphen$-something-happened"
         sentEvent.tags("path") shouldBe "/path"
         sentEvent.tags("X-Session-ID") shouldBe "dummy session id"
         sentEvent.tags("X-Request-ID") shouldBe "dummy request id"

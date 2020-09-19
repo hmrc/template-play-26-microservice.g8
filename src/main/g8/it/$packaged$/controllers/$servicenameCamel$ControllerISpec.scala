@@ -10,7 +10,7 @@ class $servicenameCamel$ControllerISpec extends ServerBaseISpec {
 
   this: Suite with ServerProvider =>
 
-  val url = s"http://localhost:\$port/$servicenameHyphen$-with-mongodb"
+  val url = s"http://localhost:\$port/$servicenameHyphen$"
 
   val wsClient = app.injector.instanceOf[WSClient]
 

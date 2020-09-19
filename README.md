@@ -19,7 +19,7 @@ and then
   
 * Test generated project using command 
 
-    `sbt test`
+    `sbt test it:test`
     
 
 How to test the template and generate an example project?
@@ -41,7 +41,7 @@ or (safer) ...
 * run `./test.sh` first
 * open `target/sandbox/template-test` in your preferred IDE, 
 * modify the generated example project as you wish, 
-* build and test it as usual, you can run `sbt test`,
+* build and test it as usual, you can run `sbt test it:test`,
 * when you are done switch back to the template root
 * run `./update-g8.sh` in order to port your changes back to the template.
 * run `./test.sh` again to validate your changes
@@ -124,7 +124,7 @@ and produce the folders and files as shown below:
 	│                   │   └── NewShinyServiceControllerISpec.scala
 	│                   │
 	│                   ├── repository
-	│                   │   └── NewShinyServiceWithMongodbRepositoryISpec.scala
+	│                   │   └── NewShinyServiceRepositoryISpec.scala
 	│                   │
 	│                   ├── stubs
 	│                   │   ├── AuthStubs.scala

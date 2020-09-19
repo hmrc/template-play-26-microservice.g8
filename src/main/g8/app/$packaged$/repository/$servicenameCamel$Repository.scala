@@ -31,36 +31,36 @@ import uk.gov.hmrc.mongo.json.ReactiveMongoFormats
 import scala.collection.Seq
 import scala.concurrent.{ExecutionContext, Future}
 
-case class $servicenameCamel$WithMongodbEntity(id: String, dummy: String)
+case class $servicenameCamel$Entity(id: String, dummy: String)
 
-object $servicenameCamel$WithMongodbEntity extends ReactiveMongoFormats {
-  implicit val formats: Format[$servicenameCamel$WithMongodbEntity] =
-    format[$servicenameCamel$WithMongodbEntity]
+object $servicenameCamel$Entity extends ReactiveMongoFormats {
+  implicit val formats: Format[$servicenameCamel$Entity] =
+    format[$servicenameCamel$Entity]
 }
 
 @Singleton
-class $servicenameCamel$WithMongodbRepository @Inject() (mongoComponent: ReactiveMongoComponent)
-    extends ReactiveRepository[$servicenameCamel$WithMongodbEntity, BSONObjectID](
-      "$servicenameHyphen$-with-mongodb",
+class $servicenameCamel$Repository @Inject() (mongoComponent: ReactiveMongoComponent)
+    extends ReactiveRepository[$servicenameCamel$Entity, BSONObjectID](
+      "$servicenameHyphen$",
       mongoComponent.mongoConnector.db,
-      $servicenameCamel$WithMongodbEntity.formats,
+      $servicenameCamel$Entity.formats,
       ReactiveMongoFormats.objectIdFormats
-    ) with StrictlyEnsureIndexes[$servicenameCamel$WithMongodbEntity, BSONObjectID] {
+    ) with StrictlyEnsureIndexes[$servicenameCamel$Entity, BSONObjectID] {
 
   def findBy(
     id: String
-  )(implicit ec: ExecutionContext): Future[List[$servicenameCamel$WithMongodbEntity]] =
+  )(implicit ec: ExecutionContext): Future[List[$servicenameCamel$Entity]] =
     find(
       Seq("id" -> Some(id)).map(option => option._1 -> toJsFieldJsValueWrapper(option._2.get)): _*
     )
 
   override def indexes =
     Seq(
-      Index(Seq("id" -> Ascending), Some("$servicenameCamel$WithMongodb"), unique = true)
+      Index(Seq("id" -> Ascending), Some("$servicenameCamel$"), unique = true)
     )
 
   def createEntity(id: String, dummy: String)(implicit ec: ExecutionContext): Future[Unit] =
-    insert($servicenameCamel$WithMongodbEntity(id, dummy)).map(_ => ())
+    insert($servicenameCamel$Entity(id, dummy)).map(_ => ())
 
   def delete(id: String)(implicit ec: ExecutionContext): Future[WriteResult] =
     remove("id" -> id)

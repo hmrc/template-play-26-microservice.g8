@@ -37,11 +37,11 @@ class AuthActionsISpec extends AppBaseISpec {
       givenAuthorisedFor(
         "{}",
         s"""{
-           |"authorisedEnrolments": [
-           |  { "key":"HMRC-AS-AGENT", "identifiers": [
-           |    { "key":"AgentReferenceNumber", "value": "fooArn" }
-           |  ]}
-           |]}""".stripMargin
+          |"authorisedEnrolments": [
+          |  { "key":"HMRC-AS-AGENT", "identifiers": [
+          |    { "key":"AgentReferenceNumber", "value": "fooArn" }
+          |  ]}
+          |]}""".stripMargin
       )
       val result = TestController.withAuthorisedAsAgent
       status(result) shouldBe 200
@@ -59,11 +59,11 @@ class AuthActionsISpec extends AppBaseISpec {
       givenAuthorisedFor(
         "{}",
         s"""{
-           |"authorisedEnrolments": [
-           |  { "key":"HMRC-MTD-IT", "identifiers": [
-           |    { "key":"MTDITID", "value": "fooMtdItId" }
-           |  ]}
-           |]}""".stripMargin
+          |"authorisedEnrolments": [
+          |  { "key":"HMRC-MTD-IT", "identifiers": [
+          |    { "key":"MTDITID", "value": "fooMtdItId" }
+          |  ]}
+          |]}""".stripMargin
       )
       an[InsufficientEnrolments] shouldBe thrownBy {
         TestController.withAuthorisedAsAgent
@@ -74,11 +74,11 @@ class AuthActionsISpec extends AppBaseISpec {
       givenAuthorisedFor(
         "{}",
         s"""{
-           |"authorisedEnrolments": [
-           |  { "key":"HMRC-AS-AGENT", "identifiers": [
-           |    { "key":"BAR", "value": "fooArn" }
-           |  ]}
-           |]}""".stripMargin
+          |"authorisedEnrolments": [
+          |  { "key":"HMRC-AS-AGENT", "identifiers": [
+          |    { "key":"BAR", "value": "fooArn" }
+          |  ]}
+          |]}""".stripMargin
       )
       an[InsufficientEnrolments] shouldBe thrownBy {
         TestController.withAuthorisedAsAgent
@@ -92,11 +92,11 @@ class AuthActionsISpec extends AppBaseISpec {
       givenAuthorisedFor(
         "{}",
         s"""{
-           |"authorisedEnrolments": [
-           |  { "key":"HMRC-MTD-IT", "identifiers": [
-           |    { "key":"MTDITID", "value": "fooMtdItId" }
-           |  ]}
-           |]}""".stripMargin
+          |"authorisedEnrolments": [
+          |  { "key":"HMRC-MTD-IT", "identifiers": [
+          |    { "key":"MTDITID", "value": "fooMtdItId" }
+          |  ]}
+          |]}""".stripMargin
       )
 
       val result = TestController.withAuthorisedAsClient
@@ -108,11 +108,11 @@ class AuthActionsISpec extends AppBaseISpec {
       givenAuthorisedFor(
         "{}",
         s"""{
-           |"authorisedEnrolments": [
-           |  { "key":"HMRC-AS-AGENT", "identifiers": [
-           |    { "key":"AgentReferenceNumber", "value": "fooArn" }
-           |  ]}
-           |]}""".stripMargin
+          |"authorisedEnrolments": [
+          |  { "key":"HMRC-AS-AGENT", "identifiers": [
+          |    { "key":"AgentReferenceNumber", "value": "fooArn" }
+          |  ]}
+          |]}""".stripMargin
       )
       an[InsufficientEnrolments] shouldBe thrownBy {
         TestController.withAuthorisedAsClient
@@ -123,11 +123,11 @@ class AuthActionsISpec extends AppBaseISpec {
       givenAuthorisedFor(
         "{}",
         s"""{
-           |"authorisedEnrolments": [
-           |  { "key":"HMRC-MTD-IT", "identifiers": [
-           |    { "key":"BAR", "value": "fooMtdItId" }
-           |  ]}
-           |]}""".stripMargin
+          |"authorisedEnrolments": [
+          |  { "key":"HMRC-MTD-IT", "identifiers": [
+          |    { "key":"BAR", "value": "fooMtdItId" }
+          |  ]}
+          |]}""".stripMargin
       )
       an[InsufficientEnrolments] shouldBe thrownBy {
         TestController.withAuthorisedAsClient
