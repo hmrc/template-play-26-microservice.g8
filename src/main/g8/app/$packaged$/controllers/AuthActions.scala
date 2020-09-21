@@ -27,33 +27,30 @@ import scala.concurrent.{ExecutionContext, Future}
 
 trait AuthActions extends AuthorisedFunctions {
 
-  protected def withAuthorisedAsAgent[A](body: Arn => Future[Result])(
-    implicit request: Request[A],
-    hc: HeaderCarrier,
-    ec: ExecutionContext): Future[Result] =
+  protected def withAuthorisedAsAgent[A](
+    body: Arn => Future[Result]
+  )(implicit request: Request[A], hc: HeaderCarrier, ec: ExecutionContext): Future[Result] =
     withEnrolledFor("HMRC-AS-AGENT", "AgentReferenceNumber") {
       case Some(arn) => body(Arn(arn))
       case None =>
         Future.failed(InsufficientEnrolments("AgentReferenceNumber identifier not found"))
     }
 
-  protected def withAuthorisedAsClient[A](body: MtdItId => Future[Result])(
-    implicit request: Request[A],
-    hc: HeaderCarrier,
-    ec: ExecutionContext): Future[Result] =
+  protected def withAuthorisedAsClient[A](
+    body: MtdItId => Future[Result]
+  )(implicit request: Request[A], hc: HeaderCarrier, ec: ExecutionContext): Future[Result] =
     withEnrolledFor("HMRC-MTD-IT", "MTDITID") {
       case Some(mtdItID) => body(MtdItId(mtdItID))
       case None          => Future.failed(InsufficientEnrolments("MTDITID identifier not found"))
     }
 
   protected def withEnrolledFor[A](serviceName: String, identifierKey: String)(
-    body: Option[String] => Future[Result])(
-    implicit request: Request[A],
-    hc: HeaderCarrier,
-    ec: ExecutionContext): Future[Result] =
+    body: Option[String] => Future[Result]
+  )(implicit request: Request[A], hc: HeaderCarrier, ec: ExecutionContext): Future[Result] =
     authorised(
       Enrolment(serviceName)
-        and AuthProviders(GovernmentGateway))
+        and AuthProviders(GovernmentGateway)
+    )
       .retrieve(authorisedEnrolments) { enrolments =>
         val id = for {
           enrolment  <- enrolments.getEnrolment(serviceName)

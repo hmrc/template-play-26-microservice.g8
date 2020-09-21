@@ -6,7 +6,7 @@ import org.scalatestplus.play.OneServerPerSuite
 import play.api.Application
 
 abstract class ServerBaseISpec
-  extends BaseISpec with OneServerPerSuite with TestApplication with ScalaFutures {
+    extends BaseISpec with OneServerPerSuite with TestApplication with ScalaFutures {
 
   override implicit lazy val app: Application = appBuilder.build()
 

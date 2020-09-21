@@ -34,14 +34,14 @@ class AuthActionsISpec extends AppBaseISpec {
   "withAuthorisedAsAgent" should {
 
     "call body with arn when valid agent" in {
-      givenAuthorisedFor(
+      stubForAuthAuthorise(
         "{}",
         s"""{
-           |"authorisedEnrolments": [
-           |  { "key":"HMRC-AS-AGENT", "identifiers": [
-           |    { "key":"AgentReferenceNumber", "value": "fooArn" }
-           |  ]}
-           |]}""".stripMargin
+          |"authorisedEnrolments": [
+          |  { "key":"HMRC-AS-AGENT", "identifiers": [
+          |    { "key":"AgentReferenceNumber", "value": "fooArn" }
+          |  ]}
+          |]}""".stripMargin
       )
       val result = TestController.withAuthorisedAsAgent
       status(result) shouldBe 200
@@ -56,14 +56,14 @@ class AuthActionsISpec extends AppBaseISpec {
     }
 
     "throw InsufficientEnrolments when agent not enrolled for service" in {
-      givenAuthorisedFor(
+      stubForAuthAuthorise(
         "{}",
         s"""{
-           |"authorisedEnrolments": [
-           |  { "key":"HMRC-MTD-IT", "identifiers": [
-           |    { "key":"MTDITID", "value": "fooMtdItId" }
-           |  ]}
-           |]}""".stripMargin
+          |"authorisedEnrolments": [
+          |  { "key":"HMRC-MTD-IT", "identifiers": [
+          |    { "key":"MTDITID", "value": "fooMtdItId" }
+          |  ]}
+          |]}""".stripMargin
       )
       an[InsufficientEnrolments] shouldBe thrownBy {
         TestController.withAuthorisedAsAgent
@@ -71,14 +71,14 @@ class AuthActionsISpec extends AppBaseISpec {
     }
 
     "throw InsufficientEnrolments when expected agent's identifier missing" in {
-      givenAuthorisedFor(
+      stubForAuthAuthorise(
         "{}",
         s"""{
-           |"authorisedEnrolments": [
-           |  { "key":"HMRC-AS-AGENT", "identifiers": [
-           |    { "key":"BAR", "value": "fooArn" }
-           |  ]}
-           |]}""".stripMargin
+          |"authorisedEnrolments": [
+          |  { "key":"HMRC-AS-AGENT", "identifiers": [
+          |    { "key":"BAR", "value": "fooArn" }
+          |  ]}
+          |]}""".stripMargin
       )
       an[InsufficientEnrolments] shouldBe thrownBy {
         TestController.withAuthorisedAsAgent
@@ -89,14 +89,14 @@ class AuthActionsISpec extends AppBaseISpec {
   "withAuthorisedAsClient" should {
 
     "call body with mtditid when valid mtd client" in {
-      givenAuthorisedFor(
+      stubForAuthAuthorise(
         "{}",
         s"""{
-           |"authorisedEnrolments": [
-           |  { "key":"HMRC-MTD-IT", "identifiers": [
-           |    { "key":"MTDITID", "value": "fooMtdItId" }
-           |  ]}
-           |]}""".stripMargin
+          |"authorisedEnrolments": [
+          |  { "key":"HMRC-MTD-IT", "identifiers": [
+          |    { "key":"MTDITID", "value": "fooMtdItId" }
+          |  ]}
+          |]}""".stripMargin
       )
 
       val result = TestController.withAuthorisedAsClient
@@ -105,14 +105,14 @@ class AuthActionsISpec extends AppBaseISpec {
     }
 
     "throw InsufficientEnrolments when client not enrolled for service" in {
-      givenAuthorisedFor(
+      stubForAuthAuthorise(
         "{}",
         s"""{
-           |"authorisedEnrolments": [
-           |  { "key":"HMRC-AS-AGENT", "identifiers": [
-           |    { "key":"AgentReferenceNumber", "value": "fooArn" }
-           |  ]}
-           |]}""".stripMargin
+          |"authorisedEnrolments": [
+          |  { "key":"HMRC-AS-AGENT", "identifiers": [
+          |    { "key":"AgentReferenceNumber", "value": "fooArn" }
+          |  ]}
+          |]}""".stripMargin
       )
       an[InsufficientEnrolments] shouldBe thrownBy {
         TestController.withAuthorisedAsClient
@@ -120,14 +120,14 @@ class AuthActionsISpec extends AppBaseISpec {
     }
 
     "throw InsufficientEnrolments when expected client's identifier missing" in {
-      givenAuthorisedFor(
+      stubForAuthAuthorise(
         "{}",
         s"""{
-           |"authorisedEnrolments": [
-           |  { "key":"HMRC-MTD-IT", "identifiers": [
-           |    { "key":"BAR", "value": "fooMtdItId" }
-           |  ]}
-           |]}""".stripMargin
+          |"authorisedEnrolments": [
+          |  { "key":"HMRC-MTD-IT", "identifiers": [
+          |    { "key":"BAR", "value": "fooMtdItId" }
+          |  ]}
+          |]}""".stripMargin
       )
       an[InsufficientEnrolments] shouldBe thrownBy {
         TestController.withAuthorisedAsClient

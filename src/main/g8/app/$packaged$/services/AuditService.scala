@@ -31,25 +31,23 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 import scala.util.Try
 
-object $servicenameCamel$WithMongodbEvent extends Enumeration {
-  val $servicenameCamel$WithMongodbSomethingHappened = Value
-  type $servicenameCamel$WithMongodbEvent = Value
+object $servicenameCamel$Event extends Enumeration {
+  val $servicenameCamel$SomethingHappened = Value
+  type $servicenameCamel$Event = Value
 }
 
 @Singleton
-class AuditService @Inject()(val auditConnector: AuditConnector) {
+class AuditService @Inject() (val auditConnector: AuditConnector) {
 
-  import $servicenameCamel$WithMongodbEvent._
+  import $servicenameCamel$Event._
 
-  def send$servicenameCamel$WithMongodbSomethingHappened(
+  def send$servicenameCamel$SomethingHappened(
     model: $servicenameCamel$Model,
-    agentReference: Arn)(
-    implicit hc: HeaderCarrier,
-    request: Request[Any],
-    ec: ExecutionContext): Unit =
+    agentReference: Arn
+  )(implicit hc: HeaderCarrier, request: Request[Any], ec: ExecutionContext): Unit =
     auditEvent(
-      $servicenameCamel$WithMongodbEvent.$servicenameCamel$WithMongodbSomethingHappened,
-      "$servicenameHyphen$-with-mongodb-something-happened",
+      $servicenameCamel$Event.$servicenameCamel$SomethingHappened,
+      "$servicenameHyphen$-something-happened",
       Seq(
         "agentReference"  -> agentReference.value,
         "parameter1"      -> model.parameter1,
@@ -59,33 +57,31 @@ class AuditService @Inject()(val auditConnector: AuditConnector) {
     )
 
   private[services] def auditEvent(
-    event: $servicenameCamel$WithMongodbEvent,
+    event: $servicenameCamel$Event,
     transactionName: String,
-    details: Seq[(String, Any)] = Seq.empty)(
-    implicit hc: HeaderCarrier,
-    request: Request[Any],
-    ec: ExecutionContext): Future[Unit] =
+    details: Seq[(String, Any)] = Seq.empty
+  )(implicit hc: HeaderCarrier, request: Request[Any], ec: ExecutionContext): Future[Unit] =
     send(createEvent(event, transactionName, details: _*))
 
   private[services] def createEvent(
-    event: $servicenameCamel$WithMongodbEvent,
+    event: $servicenameCamel$Event,
     transactionName: String,
-    details: (String, Any)*)(
-    implicit hc: HeaderCarrier,
-    request: Request[Any],
-    ec: ExecutionContext): DataEvent = {
+    details: (String, Any)*
+  )(implicit hc: HeaderCarrier, request: Request[Any], ec: ExecutionContext): DataEvent = {
 
     val detail = hc.toAuditDetails(details.map(pair => pair._1 -> pair._2.toString): _*)
     val tags = hc.toAuditTags(transactionName, request.path)
     DataEvent(
-      auditSource = "$servicenameHyphen$-with-mongodb",
+      auditSource = "$servicenameHyphen$",
       auditType = event.toString,
       tags = tags,
-      detail = detail)
+      detail = detail
+    )
   }
 
   private[services] def send(
-    events: DataEvent*)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Unit] =
+    events: DataEvent*
+  )(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Unit] =
     Future {
       events.foreach { event =>
         Try(auditConnector.sendEvent(event))

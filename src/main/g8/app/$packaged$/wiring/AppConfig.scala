@@ -33,7 +33,7 @@ trait AppConfig {
   val fooBaseUrl: String
 }
 
-class AppConfigImpl @Inject()(config: ServicesConfig) extends AppConfig {
+class AppConfigImpl @Inject() (config: ServicesConfig) extends AppConfig {
   val appName = config.getString("appName")
 
   val someInt = config.getInt("someInt")

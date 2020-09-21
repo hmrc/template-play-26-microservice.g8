@@ -23,23 +23,32 @@ import play.api.{Configuration, Environment}
 import uk.gov.hmrc.agentmtdidentifiers.model.Utr
 import $package$.connectors.MicroserviceAuthConnector
 import $package$.models.$servicenameCamel$Model
-import uk.gov.hmrc.play.bootstrap.controller.BackendController
+import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class $servicenameCamel$Controller @Inject()(
+class $servicenameCamel$Controller @Inject() (
   val authConnector: MicroserviceAuthConnector,
   val env: Environment,
-  cc: ControllerComponents)(implicit val configuration: Configuration, ec: ExecutionContext)
+  cc: ControllerComponents
+)(implicit val configuration: Configuration, ec: ExecutionContext)
     extends BackendController(cc) with AuthActions {
 
-  def entities: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok(toJson($servicenameCamel$Model("hello world", None, None, None))))
-  }
+  def entities: Action[AnyContent] =
+    Action.async { implicit request =>
+      withAuthorisedAsAgent { arn =>
+        Future.successful(Ok(toJson($servicenameCamel$Model(s"hello \${arn.value}", None, None, None))))
+      }
+    }
 
-  def entitiesByUtr(utr: Utr): Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok(toJson($servicenameCamel$Model(s"hello \$utr", None, None, None))))
-  }
+  def entitiesByUtr(utr: Utr): Action[AnyContent] =
+    Action.async { implicit request =>
+      withAuthorisedAsAgent { arn =>
+        Future.successful(
+          Ok(toJson($servicenameCamel$Model(s"hello \$utr and \${arn.value}", None, None, None)))
+        )
+      }
+    }
 
 }

@@ -24,7 +24,7 @@ import uk.gov.hmrc.play.test.UnitSpec
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class $servicenameCamel$WithMongodbRepositoryISpec extends UnitSpec with MongoApp {
+class $servicenameCamel$RepositoryISpec extends UnitSpec with MongoApp {
 
   protected def appBuilder: GuiceApplicationBuilder =
     new GuiceApplicationBuilder()
@@ -34,8 +34,8 @@ class $servicenameCamel$WithMongodbRepositoryISpec extends UnitSpec with MongoAp
 
   override implicit lazy val app: Application = appBuilder.build()
 
-  def repo: $servicenameCamel$WithMongodbRepository =
-    app.injector.instanceOf[$servicenameCamel$WithMongodbRepository]
+  def repo: $servicenameCamel$Repository =
+    app.injector.instanceOf[$servicenameCamel$Repository]
 
   override def beforeEach() {
     super.beforeEach()

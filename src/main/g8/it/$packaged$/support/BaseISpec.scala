@@ -14,7 +14,7 @@ import uk.gov.hmrc.play.HeaderCarrierConverter
 import uk.gov.hmrc.play.test.UnitSpec
 
 abstract class BaseISpec
-  extends UnitSpec with WireMockSupport with DataStreamStubs with MetricsTestSupport {
+    extends UnitSpec with WireMockSupport with DataStreamStubs with MetricsTestSupport {
 
   def app: Application
   protected def appBuilder: GuiceApplicationBuilder

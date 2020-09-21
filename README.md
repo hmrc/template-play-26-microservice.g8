@@ -8,7 +8,7 @@ How to create a new project based on the template?
 * Decide your service name (the hardest part :))
 * Run the command
 
-    `g8 hmrc/template-play-26-microservice.g8 --servicename="New Shiny Service" --serviceTargetPort="9999" --package="uk.gov.hmrc.newshinyservice"`
+    `g8 {GITHUB_USER}/template-play-26-microservice.g8 --servicename="New Shiny Service" --serviceTargetPort="9999" --package="uk.gov.hmrc.newshinyservice" -o template-test`
     
 and then
     
@@ -56,6 +56,9 @@ the template will supply the following values for the placeholders:
 	$package$ -> uk.gov.hmrc.newshinyservice
 	$servicenameCamel$ -> NewShinyService
 	$servicenamecamel$ -> newShinyService
+	$servicenameNoSpaceLowercase$ -> newshinyservice
+	$servicenameNoSpaceUppercase$ -> NEWSHINYSERVICE
+	$servicenamesnake$ -> new_shiny_service
 	$servicenameSnake$ -> NEW_SHINY_SERVICE
 	$servicenamePackage$ -> New.Shiny.Service
 	$servicenamePackageLowercase$ -> new.shiny.service
@@ -121,7 +124,7 @@ and produce the folders and files as shown below:
 	│                   │   └── NewShinyServiceControllerISpec.scala
 	│                   │
 	│                   ├── repository
-	│                   │   └── NewShinyServiceWithMongodbRepositoryISpec.scala
+	│                   │   └── NewShinyServiceRepositoryISpec.scala
 	│                   │
 	│                   ├── stubs
 	│                   │   ├── AuthStubs.scala
